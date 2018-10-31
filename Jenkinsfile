@@ -8,17 +8,17 @@ pipeline {
     }    
     agent {
         docker { 
-            image 'hrishioa/oyente' 
-            args '-v /product/project/customers/ABCCompany/:/ABCCompany -w /ABCCompany'
+            image 'mythril/myth' 
+            args '-v /product/project/customers/GHICompany/:/GHICompany -w /GHICompany'
             reuseNode true   
                }
     }
-
     stages {
-        stage('Test') {
+        stage('Tests') {
             steps {
-                sh 'python $CUSTOMERROOT/ABCCompany/oyente.py $CUSTOMERROOT/ABCCompany/greeter.sol > /nfs/`date "+%Y%m%d_%H%M%S"`.json'
+                sh 'docker exec -v $(pwd):/tmp mythril/myth -x TGContract.sol > /nfs/`date "+%Y%m%d_%H%M%S"`.json'
             }
         }
     }
+    
 }
